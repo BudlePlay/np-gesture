@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 import pandas as pd
 
-df = pd.read_csv('data/train/swing/swing3.csv')
+df = pd.read_csv('data/AccelGyro3.csv')
 
 ROW_CNT = 15
 
@@ -15,12 +15,8 @@ plt.xlabel('time')
 plt.ylabel('y')
 plt.title('IMU data collector')
 
-ax.set(xlim=[0, 50], ylim=[0, 50])
 ax.set_aspect('auto', adjustable='box')
 
-xdata = [0]
-ydata = [0]
-line, = ax.plot(xdata, ydata)
 
 x = [i for i in range(len(df))]
 
@@ -36,6 +32,10 @@ for i in range(4, 7):
     ax.plot(x, y, label=str(df.columns[i]), color='g')
     ax.legend()
 
+xdata = []
+ydata = []
+line, = ax.plot(xdata, ydata)
+
 
 def add_point(event):
     if event.inaxes != ax:
@@ -43,21 +43,36 @@ def add_point(event):
 
     # mouse left click
     if event.button == 1:
+
         x = event.xdata
         y = event.ydata
 
+        xdata.clear()
+        ydata.clear()
+        line.set_data(xdata, ydata)
+        plt.draw()
+
         xdata.append(x)
-        ydata.append(y)
+        ydata.append(500)
+
+        xdata.append(x)
+        ydata.append(-500)
+
+        xdata.append(x + 15)
+        ydata.append(-500)
+
+        xdata.append(x + 15)
+        ydata.append(500)
 
         line.set_data(xdata, ydata)
         plt.draw()
+
+        print(x)
+        print(y)
 
     # mouse right click
     if event.button == 3:
-        xdata.pop()
-        ydata.pop()
-        line.set_data(xdata, ydata)
-        plt.draw()
+        pass
 
     # mouse mid click
     if event.button == 2:
