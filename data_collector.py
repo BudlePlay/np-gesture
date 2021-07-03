@@ -61,21 +61,21 @@ def draw_vertical_line(x):
     plt.draw()
 
 
+x = 0
+
+
 def add_point(event):
+    global x
     if event.inaxes != ax:
         return
 
     # mouse left click
     if event.button == 1:
         x = int(event.xdata)
-        y = int(event.ydata)
 
         remove_line()
 
         draw_vertical_line(x)
-
-        print(x)
-        print(y)
 
     # mouse right click
     if event.button == 3:
@@ -87,6 +87,22 @@ def add_point(event):
         plt.close()
 
 
-cid = plt.connect('button_press_event', add_point)
+def on_press(event):
+    global x
+    print('press', event.key)
+    sys.stdout.flush()
+    if event.key == 'right':
+        x += 1
+        remove_line()
+        draw_vertical_line(x)
+
+    if event.key == 'left':
+        x -= 1
+        remove_line()
+        draw_vertical_line(x)
+
+
+plt.connect('button_press_event', add_point)
+plt.connect('key_press_event', on_press)
 
 plt.show()
