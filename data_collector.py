@@ -4,6 +4,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 import pandas as pd
+import sys
 
 df = pd.read_csv('data/AccelGyro3.csv')
 
@@ -16,7 +17,6 @@ plt.ylabel('y')
 plt.title('IMU data collector')
 
 ax.set_aspect('auto', adjustable='box')
-
 
 x = [i for i in range(len(df))]
 
@@ -32,9 +32,33 @@ for i in range(4, 7):
     ax.plot(x, y, label=str(df.columns[i]), color='g')
     ax.legend()
 
-xdata = []
-ydata = []
-line, = ax.plot(xdata, ydata)
+x_line = []
+y_line = []
+line, = ax.plot(x_line, y_line)
+
+
+def remove_line():
+    x_line.clear()
+    y_line.clear()
+    line.set_data(x_line, y_line)
+    plt.draw()
+
+
+def draw_vertical_line(x):
+    x_line.append(x)
+    y_line.append(500)
+
+    x_line.append(x)
+    y_line.append(-500)
+
+    x_line.append(x + 15)
+    y_line.append(-500)
+
+    x_line.append(x + 15)
+    y_line.append(500)
+
+    line.set_data(x_line, y_line)
+    plt.draw()
 
 
 def add_point(event):
@@ -43,29 +67,12 @@ def add_point(event):
 
     # mouse left click
     if event.button == 1:
+        x = int(event.xdata)
+        y = int(event.ydata)
 
-        x = event.xdata
-        y = event.ydata
+        remove_line()
 
-        xdata.clear()
-        ydata.clear()
-        line.set_data(xdata, ydata)
-        plt.draw()
-
-        xdata.append(x)
-        ydata.append(500)
-
-        xdata.append(x)
-        ydata.append(-500)
-
-        xdata.append(x + 15)
-        ydata.append(-500)
-
-        xdata.append(x + 15)
-        ydata.append(500)
-
-        line.set_data(xdata, ydata)
-        plt.draw()
+        draw_vertical_line(x)
 
         print(x)
         print(y)
@@ -81,4 +88,5 @@ def add_point(event):
 
 
 cid = plt.connect('button_press_event', add_point)
+
 plt.show()
