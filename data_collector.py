@@ -4,7 +4,6 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 import pandas as pd
-import sys
 
 df = pd.read_csv('data/AccelGyro3.csv')
 
@@ -51,10 +50,10 @@ def draw_vertical_line(x):
     x_line.append(x)
     y_line.append(-500)
 
-    x_line.append(x + 15)
+    x_line.append(x + ROW_CNT - 1)
     y_line.append(-500)
 
-    x_line.append(x + 15)
+    x_line.append(x + ROW_CNT - 1)
     y_line.append(500)
 
     line.set_data(x_line, y_line)
@@ -79,7 +78,10 @@ def add_point(event):
 
     # mouse right click
     if event.button == 3:
-        pass
+        cut_df = df.loc[x:x + ROW_CNT - 1].set_index('time')
+        csv = cut_df.to_csv()
+        print('---------------------------------------------------')
+        print(csv)
 
     # mouse mid click
     if event.button == 2:
@@ -89,8 +91,6 @@ def add_point(event):
 
 def on_press(event):
     global x
-    print('press', event.key)
-    sys.stdout.flush()
     if event.key == 'right':
         x += 1
         remove_line()
@@ -102,7 +102,7 @@ def on_press(event):
         draw_vertical_line(x)
 
 
-plt.connect('button_press_event', add_point)
+cid = plt.connect('button_press_event', add_point)
 plt.connect('key_press_event', on_press)
 
 plt.show()
