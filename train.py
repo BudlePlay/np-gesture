@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 losses = []
-
+PATH = 'model.pth'
 
 def train(model, train_loader, optimizer):
     model.train()
@@ -60,10 +60,10 @@ def main():
 
     optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
-    dataset_train = Dataset(data_dir='train_data', transform=None)
+    dataset_train = Dataset(data_dir='data/train', transform=None)
     loader_train = DataLoader(dataset_train, batch_size=5, shuffle=False, num_workers=0)
 
-    dataset_test = Dataset(data_dir='val_data', transform=None)
+    dataset_test = Dataset(data_dir='data/val', transform=None)
     loader_test = DataLoader(dataset_test, batch_size=5, shuffle=False, num_workers=0)
 
     accuracies = []
@@ -73,6 +73,8 @@ def main():
         losses.append(loss)
         accuracy = evaluate(model, loader_test)
         accuracies.append(accuracy)
+
+    torch.save(model, PATH)
 
     plt.title('loss')
     plt.plot(range(len(losses)), losses)
