@@ -3,27 +3,27 @@ import torch.nn as nn
 
 
 class GestureClassifier(nn.Module):
-    def __init__(self, input_size=20*3):
+    def __init__(self, input_size=20):
         super(GestureClassifier, self).__init__()
         self.input_size = input_size
 
         self.relu = nn.ReLU()
 
-        self.accel_fc1 = nn.Linear(input_size, 64)
-        self.gyro_fc1 = nn.Linear(input_size, 64)
+        hidden_size = 32
+        self.hidden_size = hidden_size
+        self.accel_lstm = nn.LSTM(input_size=3, hidden_size=hidden_size, num_layers=5, batch_first=True)
+        self.gyro_lstm = nn.LSTM(input_size=3, hidden_size=hidden_size, num_layers=5, batch_first=True)
 
-        self.fc2 = nn.Linear(64*2, 32)
-        self.fc3 = nn.Linear(32, 5)
+        self.fc_1 = nn.Linear(input_size * hidden_size * 2, 128)  # fully connected 1
+        self.fc_2 = nn.Linear(128, 5)  # fully connected last layer
 
     def forward(self, accel, gyro):
-        accel_x = self.accel_fc1(accel)
-        gyro_x = self.gyro_fc1(gyro)
-        accel_x = self.relu(accel_x)
-        gyro_x = self.relu(gyro_x)
-
+        accel_x, (_, _) = self.accel_lstm(accel)
+        gyro_x, (_, _) = self.gyro_lstm(gyro)
         x = torch.cat((accel_x, gyro_x), dim=1)
-
-        x = self.fc2(x)
+        x = x.reshape(x.shape[0], -1)
+        x = self.fc_1(x)
         x = self.relu(x)
+        x = self.fc_2(x)
 
-        return self.fc3(x)
+        return x

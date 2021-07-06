@@ -14,6 +14,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 losses = []
 PATH = 'model.pth'
 
+
 def train(model, train_loader, optimizer):
     model.train()
     train_loss = 0
@@ -56,15 +57,15 @@ def evaluate(model, test_loader):
 
 
 def main():
-    model = GestureClassifier(15 * 3).to(device)
+    model = GestureClassifier(15).to(device)
 
-    optimizer = optim.Adam(model.parameters(), lr=1e-4)
+    optimizer = optim.Adam(model.parameters(), lr=5e-5)
 
     dataset_train = Dataset(data_dir='data/train', transform=None)
-    loader_train = DataLoader(dataset_train, batch_size=5, shuffle=False, num_workers=0)
+    loader_train = DataLoader(dataset_train, batch_size=1000, shuffle=False, num_workers=0)
 
     dataset_test = Dataset(data_dir='data/val', transform=None)
-    loader_test = DataLoader(dataset_test, batch_size=5, shuffle=False, num_workers=0)
+    loader_test = DataLoader(dataset_test, batch_size=1000, shuffle=False, num_workers=0)
 
     accuracies = []
 
