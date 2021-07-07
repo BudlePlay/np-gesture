@@ -14,6 +14,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 losses = []
 PATH = 'model.pth'
 
+
 def train(model, train_loader, optimizer):
     model.train()
     train_loss = 0
@@ -61,18 +62,21 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
     dataset_train = Dataset(data_dir='data/train', transform=None)
-    loader_train = DataLoader(dataset_train, batch_size=5, shuffle=False, num_workers=0)
+    loader_train = DataLoader(dataset_train, batch_size=1000, shuffle=False, num_workers=0)
 
     dataset_test = Dataset(data_dir='data/val', transform=None)
-    loader_test = DataLoader(dataset_test, batch_size=5, shuffle=False, num_workers=0)
+    loader_test = DataLoader(dataset_test, batch_size=1000, shuffle=False, num_workers=0)
 
     accuracies = []
 
+    print('학습 시작')
     for i in range(300):
         loss = train(model, loader_train, optimizer)
         losses.append(loss)
         accuracy = evaluate(model, loader_test)
         accuracies.append(accuracy)
+
+        print('epoch : ', i)
 
     torch.save(model, PATH)
 
