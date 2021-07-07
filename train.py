@@ -86,6 +86,8 @@ def main():
 
     plt.title('accuracy')
     plt.plot(range(len(accuracies)), accuracies)
+    plt.ylim(0, 100)
+
     plt.show()
 
 
