@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 losses = []
+PATH = 'model.pth'
 
 
 def train(model, train_loader, optimizer):
@@ -60,19 +61,24 @@ def main():
 
     optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
-    dataset_train = Dataset(data_dir='train_data', transform=None)
-    loader_train = DataLoader(dataset_train, batch_size=5, shuffle=False, num_workers=0)
+    dataset_train = Dataset(data_dir='data/train', transform=None)
+    loader_train = DataLoader(dataset_train, batch_size=1000, shuffle=False, num_workers=0)
 
-    dataset_test = Dataset(data_dir='val_data', transform=None)
-    loader_test = DataLoader(dataset_test, batch_size=5, shuffle=False, num_workers=0)
+    dataset_test = Dataset(data_dir='data/val', transform=None)
+    loader_test = DataLoader(dataset_test, batch_size=1000, shuffle=False, num_workers=0)
 
     accuracies = []
 
+    print('학습 시작')
     for i in range(300):
         loss = train(model, loader_train, optimizer)
         losses.append(loss)
         accuracy = evaluate(model, loader_test)
         accuracies.append(accuracy)
+
+        print('epoch : ', i)
+
+    torch.save(model, PATH)
 
     plt.title('loss')
     plt.plot(range(len(losses)), losses)

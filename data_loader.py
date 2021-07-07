@@ -11,7 +11,7 @@ class Dataset(torch.utils.data.Dataset):
 
         classes = os.listdir(self.data_dir)
         classes.sort()
-
+        print(classes)
         lst_input = []
         lst_label = []
 
@@ -33,7 +33,7 @@ class Dataset(torch.utils.data.Dataset):
 
         sample = self.lst_input[index]
         accel = sample.iloc[:, 1:4]
-        gyro = sample.iloc[:, 1:4]
+        gyro = sample.iloc[:, 4:7]
 
         accel = np.array(accel).reshape(-1)
 

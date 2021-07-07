@@ -8,7 +8,7 @@ time, AX, AY, AZ, GX, GY, GZ
 12:26:09.121, 0.97, -0.17, -0.11, 1.59, -1.65, -5.49
 '''
 
-df = pd.read_csv('data/train/wait/wait.csv')
+df = pd.read_csv('data/train/0_wait/wait.csv')
 
 ROW_CNT = 15
 
