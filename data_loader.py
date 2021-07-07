@@ -35,9 +35,9 @@ class Dataset(torch.utils.data.Dataset):
         accel = sample.iloc[:, 1:4]
         gyro = sample.iloc[:, 4:7]
 
-        accel = np.array(accel).reshape(-1)
+        accel = np.array(accel)
 
-        gyro = np.array(gyro).reshape(-1)
+        gyro = np.array(gyro)
 
         accel = torch.tensor(accel, dtype=torch.float)
         gyro = torch.tensor(gyro, dtype=torch.float)
