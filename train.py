@@ -70,7 +70,7 @@ def main():
     accuracies = []
 
     print('학습 시작')
-    for i in range(300):
+    for i in range(1000):
         loss = train(model, loader_train, optimizer)
         losses.append(loss)
         accuracy = evaluate(model, loader_test)

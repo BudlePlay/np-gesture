@@ -12,8 +12,8 @@ class GestureClassifier(nn.Module):
         self.cnn_1 = nn.Conv1d(6, 32, kernel_size=3)
         self.cnn_2 = nn.Conv1d(32, 32, kernel_size=3)
         self.cnn_3 = nn.Conv1d(32, 32, kernel_size=3)
-        self.fc_1 = nn.Linear(288, 288)
-        self.fc_2 = nn.Linear(288, 5)
+        self.fc_1 = nn.Linear(32, 32)
+        self.fc_2 = nn.Linear(32, 5)
 
 
     def forward(self, accel, gyro):
